@@ -1,8 +1,8 @@
-def encode(encoding_text, filename="image.png"):
+def encode_image(encoding_text, filename="image.png"):
     import numpy as np
     from math import sqrt, ceil
     from PIL import Image
-    a = bytearray(encoding_text, 'ascii')
+    a = bytearray(encoding_text, 'ISO-8859-1')
     image_list = []
     color_values = ()
     for i in range(len(a)):
@@ -21,14 +21,13 @@ def encode(encoding_text, filename="image.png"):
     im.putdata(data)
     im.save(filename)
 
-def decode(image_title):
+def decode_image(image_title):
     from PIL import Image
     from numpy import asarray
     img = Image.open(image_title)
     image_list = asarray(img).tolist()
     num_array = [item for subl in image_list for subsubl in subl for item in subsubl]
-    return bytearray(num_array).decode()
-    
+    return bytearray(num_array).decode('ISO-8859-1', errors='ignore')
+
 if __name__ == '__main__': # checks if the code is ran as a file
-    encode("The quick brown fox jumped over the lazy dog.")
-    print(decode("image.png"))
+    encode_image("ÿÿÿ")
