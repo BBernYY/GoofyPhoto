@@ -1,15 +1,16 @@
-def encode(encoding_text):
+def encode(encoding_text, filename="image.png"):
     import numpy as np
     from math import sqrt, ceil
     from PIL import Image
-    letters = list("屈\n abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_=+,./?;:'\\\"[]{}<>\|Þßàáâãäåæçèéêëìíîïñòóôõö÷øùúûüýþ")
+    a = bytearray(encoding_text, 'ascii')
     image_list = []
     color_values = ()
-    for i in list(encoding_text):
-        if len(color_values) == 3:
+    for i in range(len(a)):
+        if len(color_values) < 3:
+            color_values += (a[i],)
+        else:
             image_list.append(color_values)
-            color_values = ()
-        color_values += (letters.index(i)*2,)
+            color_values = (a[i],)
     rest = [0,0,0]
     rest[:len(color_values)] = color_values
     image_list.append((*rest,))
@@ -18,28 +19,16 @@ def encode(encoding_text):
     data = [(0,0,0) for y in range(im.size[1]) for x in range(im.size[0])]
     data[:len(image_list)] = image_list
     im.putdata(data)
-    im.save("image.png")
+    im.save(filename)
 
 def decode(image_title):
     from PIL import Image
     from numpy import asarray
     img = Image.open(image_title)
     image_list = asarray(img).tolist()
-    letters = list("屈\n abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_=+,./?;:'\\\"[]{}<>\|Þßàáâãäåæçèéêëìíîïñòóôõö÷øùúûüýþ")
-    decode = []
-    for row in image_list:
-        for rgb in row:
-            for i in rgb:
-                if not letters[i//2] == '屈':
-                    decode.append(letters[i//2])
-    return "".join(decode)
-
-
-
-
-
-
-
+    num_array = [item for subl in image_list for subsubl in subl for item in subsubl]
+    return bytearray(num_array).decode()
+    
 if __name__ == '__main__': # checks if the code is ran as a file
-    encode("Among us.")
+    encode("The quick brown fox jumped over the lazy dog.")
     print(decode("image.png"))
