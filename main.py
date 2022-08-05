@@ -1,8 +1,8 @@
-def encode_image(encoding_text, filename="image.png"):
+def encode_image(encoding_text, filename="image.png", encoding="ISO-8859-1"):
     import numpy as np
     from math import sqrt, ceil
     from PIL import Image
-    a = bytearray(encoding_text, 'ISO-8859-1')
+    a = bytearray(encoding_text, encoding=encoding)
     image_list = []
     color_values = ()
     for i in range(len(a)):
@@ -21,13 +21,13 @@ def encode_image(encoding_text, filename="image.png"):
     im.putdata(data)
     im.save(filename)
 
-def decode_image(image_title):
+def decode_image(image_title, encoding="ISO-8859-1"):
     from PIL import Image
     from numpy import asarray
     img = Image.open(image_title)
     image_list = asarray(img).tolist()
     num_array = [item for subl in image_list for subsubl in subl for item in subsubl]
-    return bytearray(num_array).decode('ISO-8859-1', errors='ignore')
+    return bytearray(num_array).decode(encoding, errors='ignore')
 
 if __name__ == '__main__': # checks if the code is ran as a file
     encode_image("ÿÿÿ")

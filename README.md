@@ -3,5 +3,4 @@ encodes text into images
 ## how to use
 use the encode() and decode() functions
 ## info
-* To be efficient with the image, not all unicode characters are usable. If i have to add any other characters, create an issue!
-* 
+* I used ISO-8859-1 because i live in the Netherlands but feel free to change the version! (it wont work with encodings above 8 bits, because of the image bit depth always being 8, It's a pain to change it, and 4-bit or lower encoding will be stored less efficiently than 8-bit)
